@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Resume Builder</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    #resumeContent {
+      /* A4 size in pixels for web view at 96 DPI */
+      width: 794px; 
+      min-height: 1123px; /* Changed from 1100px to standard A4 height */
+      margin: 0 auto;
+      background: white;
+      box-sizing: border-box;
+      /* Added padding for a slight margin */
+      padding: 0; 
+    }
+
+    /* Styles for the input fields in the contact section */
+    .contact-input-wrapper {
+      margin-bottom: 8px; /* Add some space between lines */
+      padding-bottom: 2px; /* Space above the border */
+      border-bottom: 1px solid white;
+    }
+
+    .contact-input {
+      width: 100%;
+      background-color: transparent;
+      border: none; /* Removed default border */
+      color: inherit;
+      padding: 0;
+      /* Ensured enough height for a single line of text */
+      min-height: 1.5rem; 
+      line-height: 1.5;
+      font-size: 0.875rem; /* text-sm */
+    }
+
+    /* Styles for the profile picture container (the circle) */
+    #profilePictureContainer {
+      width: 120px; 
+      height: 120px; 
+      border-radius: 50%; 
+      overflow: hidden; 
+      margin-bottom: 10px; /* Reduced margin */
+      border: 3px solid white; 
+      display: flex; 
+      justify-content: center;
+      align-items: center;
+      background-color: rgba(255, 255, 255, 0.2); 
+    }
+
+    #profilePicture {
+      width: 100%;
+      height: 100%;
+      object-fit: cover; 
+    }
+
+    /* Style for the file input itself, visible and custom styled */
+    .custom-file-input {
+      color: transparent; /* Hide text, only button shows */
+      width: 100%;
+      max-width: 150px; /* Constrain width */
+      cursor: pointer;
+      font-size: 0.75rem; /* text-xs */
+      margin-bottom: 20px;
+    }
+
+    /* HIDE AI BUTTONS IN PDF */
+    @media print {
+      .no-print {
+        display: none !important;
+        visibility: hidden !important;
+      }
+    }
+  </style>
+</head>
+
+<body class="bg-gray-900 text-white font-sans flex flex-col items-center min-h-screen">
+
+  <header class="w-full bg-gray-900 shadow-md sticky top-0 z-10">
+    <nav class="max-w-7xl mx-auto px-6 py-3 flex justify-between items-center">
+      <div class="text-2xl font-bold text-indigo-400">
+        AI <span class="text-white">Resume Builder</span>
+      </div>
+      <div class="space-x-3">
+        <a href="home.html"><button class="bg-indigo-600 px-3 py-1 rounded hover:bg-indigo-700">Home</button></a>
+        <a href="Template.html"><button class="bg-emerald-600 px-3 py-1 rounded hover:bg-emerald-700">Change Template</button></a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="flex-grow flex justify-center py-4 px-3 w-full">
+    <div id="resumeContent" class="bg-white text-gray-800 shadow-2xl rounded-lg flex overflow-hidden">
+
+      <aside class="w-1/3 bg-[#1E3A8A] text-white p-5 flex flex-col items-center">
+
+        <div id="profilePictureContainer">
+          <img id="profilePicture" src="" alt="Profile Picture" class="hidden">
+          <span id="profilePicturePlaceholder" class="text-gray-300 text-center text-xs"></span>
+        </div>
+        
+        <input type="file" id="profilePictureInput" accept="image/*" class="no-print custom-file-input">
+        
+        <h3 class="text-sm font-semibold uppercase border-b border-white mb-3 w-full mt-4">Contact</h3>
+        <div class="text-sm mb-3 w-full space-y-1">
+          <div class="contact-input-wrapper">
+            <input id="phone" type="text" placeholder="Phone Number" class="contact-input focus:outline-none">
+          </div>
+          <div class="contact-input-wrapper">
+            <input id="email" type="text" placeholder="Email" class="contact-input focus:outline-none">
+          </div>
+          <div class="contact-input-wrapper">
+            <input id="address" type="text" placeholder="Address" class="contact-input focus:outline-none">
+          </div>
+        </div>
+
+        <div class="flex justify-between items-center w-full mb-1 mt-4">
+          <h3 class="text-sm font-semibold uppercase border-b border-white w-full">Skills</h3>
+          <button onclick="generateSkillsAI()" class="no-print ml-2 bg-purple-600 hover:bg-purple-700 text-white px-2 py-1 rounded text-[10px]">AI</button>
+        </div>
+
+        <textarea id="skills" placeholder="C, Java, Python..." class="w-full text-sm bg-transparent border border-white rounded p-1 mb-3 h-16"></textarea>
+
+        <h3 class="text-sm font-semibold uppercase border-b border-white mb-2 w-full">LinkedIn</h3>
+        <textarea id="linkedin" placeholder="Your LinkedIn URL..." class="w-full text-sm bg-transparent border border-white rounded p-1 mb-3 h-12"></textarea>
+      </aside>
+
+      <div class="w-2/3 p-5">
+
+        <input id="name" type="text" placeholder="Your Full Name"
+              class="w-full text-center text-xl font-bold bg-transparent border-b border-gray-400 mb-3">
+
+        <div class="flex justify-between items-center">
+          <h2 class="text-lg font-bold text-[#1E3A8A] border-b-2 border-[#1E3A8A] w-full">Professional Summary</h2>
+          <button onclick="generateSummaryAI()" class="no-print bg-purple-600 hover:bg-purple-700 text-white px-2 py-1 rounded text-sm ml-2">AI</button>
+        </div>
+
+        <textarea id="summary" placeholder="AI will generate your summary..." class="w-full border border-gray-300 rounded p-2 text-sm h-20 mb-4"></textarea>
+
+        <div class="mb-4 bg-white p-3 rounded-xl shadow-md border border-gray-200">
+          <h2 class="text-lg font-bold text-[#1E3A8A] mb-2">Work Experience</h2>
+          <div class="bg-gray-100 p-3 rounded-lg border border-gray-300 space-y-2">
+            <input id="jobTitle" type="text" placeholder="Job Title" class="border border-gray-300 rounded p-1.5 w-full text-sm">
+            <input id="company" type="text" placeholder="Company" class="border border-gray-300 rounded p-1.5 w-full text-sm">
+            <input id="duration" type="text" placeholder="Duration (e.g., 2022 - Present)" class="border border-gray-300 rounded p-1.5 w-full text-sm">
+          </div>
+        </div>
+
+        <div class="flex justify-between items-center">
+          <h2 class="text-lg font-bold text-[#1E3A8A] mb-2">Projects</h2>
+          <button onclick="generateProjectsAI()" class="no-print bg-purple-600 hover:bg-purple-700 text-white px-2 py-1 rounded text-sm ml-2">AI</button>
+        </div>
+
+        <textarea id="projects" placeholder="AI will generate your projects..." class="w-full border border-gray-300 rounded p-2 text-sm h-14 mb-4"></textarea>
+
+        <h2 class="text-lg font-bold text-[#1E3A8A] border-b-2 border-[#1E3A8A] mb-1">Education</h2>
+        <div class="border border-gray-300 rounded p-3 bg-white space-y-2 mb-4">
+          <input id="degree" type="text" placeholder="Degree" class="w-full border border-gray-300 rounded p-2 text-sm">
+          <input id="institute" type="text" placeholder="Institute Name" class="w-full border border-gray-300 rounded p-2 text-sm">
+          <input id="graduationYear" type="text" placeholder="Graduation Year" class="w-full border border-gray-300 rounded p-2 text-sm">
+          <textarea id="coursework" placeholder="Coursework" class="w-full border border-gray-300 rounded p-2 text-sm h-16"></textarea>
+        </div>
+
+        <div class="bg-white p-3 rounded-xl shadow-md border border-gray-200">
+          <h2 class="text-lg font-bold text-[#1E3A8A] mb-2">Certificates</h2>
+          <div class="bg-gray-100 p-3 rounded-lg border border-gray-300 space-y-2">
+            <input id="certificateTitle" type="text" placeholder="Certificate Title" class="border border-gray-300 rounded p-1.5 w-full text-sm">
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div class="fixed bottom-5 left-1/2 -translate-x-1/2 no-print">
+    <button onclick="generatePDF()" class="bg-indigo-600 text-white px-8 py-2 rounded-lg font-semibold hover:bg-indigo-700">
+      Download Resume (PDF)
+    </button>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+
+  <script>
+
+    /* ---------- Profile Picture Handling ---------- */
+    const profilePictureInput = document.getElementById('profilePictureInput');
+    const profilePicture = document.getElementById('profilePicture');
+    const profilePicturePlaceholder = document.getElementById('profilePicturePlaceholder');
+    let profilePictureBase64 = null; // To store base64 for PDF
+
+    profilePictureInput.addEventListener('change', function(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          profilePicture.src = e.target.result;
+          profilePicture.classList.remove('hidden');
+          profilePicturePlaceholder.classList.add('hidden');
+          profilePictureBase64 = e.target.result; // Store base64
+        };
+        reader.readAsDataURL(file);
+      } else {
+        profilePicture.src = "";
+        profilePicture.classList.add('hidden');
+        profilePicturePlaceholder.classList.remove('hidden');
+        profilePictureBase64 = null;
+      }
+    });
+
+
+    /* ---------- AI BACKEND CALL ---------- */
+    async function callAI(type) {
+      const name = document.getElementById("name").value || "Candidate";
+      const degree = document.getElementById("degree").value || "";
+      const skills = document.getElementById("skills").value || "";
+
+      const body = { type, name, degree, skills };
+
+      try {
+        const res = await fetch("http://localhost:8080/api/ai/generate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body)
+        });
+
+        return await res.text();
+      } catch (err) {
+        alert("AI Backend not running!");
+        return "";
+      }
+    }
+
+    async function generateSummaryAI() {
+      document.getElementById("summary").value = "Generating using AI...";
+      document.getElementById("summary").value = await callAI("summary");
+    }
+
+    async function generateSkillsAI() {
+      document.getElementById("skills").value = "Generating using AI...";
+      document.getElementById("skills").value = await callAI("skills");
+    }
+
+    async function generateProjectsAI() {
+      document.getElementById("projects").value = "Generating using AI...";
+      document.getElementById("projects").value = await callAI("projects");
+    }
+
+    /* ---------- SAVE TO BACKEND ---------- */
+    async function saveResumeToBackend() {
+      const resumeData = {
+        name: document.getElementById("name").value,
+        phone: document.getElementById("phone").value,
+        email: document.getElementById("email").value,
+        address: document.getElementById("address").value,
+        skills: document.getElementById("skills").value,
+        linkedin: document.getElementById("linkedin").value,
+        summary: document.getElementById("summary").value,
+        jobTitle: document.getElementById("jobTitle").value,
+        company: document.getElementById("company").value,
+        duration: document.getElementById("duration").value,
+        experience: document.getElementById('jobTitle').value + " at " + 
+                    document.getElementById('company').value + 
+                    " (" + document.getElementById('duration').value + ")",
+        projects: document.getElementById("projects").value,
+        degree: document.getElementById("degree").value,
+        institute: document.getElementById("institute").value,
+        graduationYear: document.getElementById("graduationYear").value,
+        coursework: document.getElementById("coursework").value,
+        certificateTitle: document.getElementById("certificateTitle").value,
+        education: document.getElementById('degree').value + ", " + 
+                    document.getElementById('institute').value + 
+                    " (" + document.getElementById('graduationYear').value + ") | " + 
+                    document.getElementById('coursework').value,
+        profilePicture: profilePictureBase64
+      };
+
+      try {
+        await fetch("http://localhost:8080/api/resumes", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(resumeData)
+        });
+      } catch (err) {
+        alert("Backend save failed!");
+      }
+    }
+
+    /* ---------- PDF GENERATION (AI BUTTONS HIDDEN) ---------- */
+    async function generatePDF() {
+      await saveResumeToBackend();
+
+      const element = document.getElementById("resumeContent");
+
+      const opt = {
+        margin: 0,
+        filename: "My_Resume.pdf",
+        image: { type: "jpeg", quality: 1 },
+        html2canvas: { 
+          scale: 2,
+          scrollY: 0,
+          ignoreElements: (el) => el.classList.contains("no-print")  
+        },
+        /* Updated format height to standard A4 (1123px) */
+        jsPDF: { unit: "px", format: [794, 1123], orientation: "portrait" } 
+      };
+
+      html2pdf().set(opt).from(element).save();
+    }
+
+  </script>
+
+</body>
+</html>

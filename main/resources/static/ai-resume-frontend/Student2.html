@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resume Template 2</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    #resumeContent {
+      width: 794px; 
+      min-height: 1123px;
+      margin: 0 auto;
+      background: white;
+      box-sizing: border-box;
+    }
+
+    #name::placeholder {
+        color: rgba(255, 255, 255, 0.7);
+    }
+
+    textarea {
+      font-family: inherit;
+      font-size: 0.9rem;
+      background: transparent;
+      color: inherit;
+      overflow: hidden;
+      resize: none;
+    }
+
+    @media print {
+      body * { visibility: hidden; }
+      #resumeContent, #resumeContent * { visibility: visible; }
+      #resumeContent { position: absolute; left: 0; top: 0; }
+      .no-print { display: none !important; }
+      [for="profileUpload"] { display: none !important; }
+    }
+  </style>
+</head>
+
+<body class="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 flex flex-col items-center py-10 font-sans">
+
+  <div class="w-full flex justify-between items-center px-10 mb-6 no-print">
+    <h1 class="text-2xl font-bold text-white">AI <span class="text-indigo-400">Resume Builder</span></h1>
+    <div class="space-x-4">
+      <a href="home.html" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-semibold transition duration-300">Home</a>
+      <a href="Template.html" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-semibold transition duration-300">Change Template</a>
+    </div>
+  </div>
+
+  <div id="resumeContent" class="bg-white shadow-2xl flex flex-col rounded-lg overflow-hidden">
+
+    <header class="bg-gray-900 text-white flex items-center p-6">
+      <div class="relative">
+        <img id="profilePreview" src="https://placehold.co/100x100"
+              class="rounded-full w-24 h-24 object-cover border-4 border-white mr-6" alt="Profile Photo">
+        <label for="profileUpload"
+                class="absolute bottom-0 left-0 bg-black bg-opacity-60 text-xs text-white px-1 rounded cursor-pointer no-print">
+          Upload
+        </label>
+        <input id="profileUpload" type="file" accept="image/*" onchange="previewPhoto(event)" class="hidden no-print">
+      </div>
+      <div>
+        <input id="name" type="text" placeholder="Your Name"
+                class="text-3xl font-bold uppercase bg-transparent border-b-2 border-white outline-none w-full mb-1 placeholder-white">
+      </div>
+    </header>
+
+    <div class="flex flex-row">
+
+      <aside class="w-1/3 flex flex-col text-white text-sm">
+
+        <section class="bg-orange-600 p-5 space-y-3">
+          <h2 class="font-bold text-lg uppercase border-b border-white mb-2">Contacts</h2>
+
+          <div class="space-y-3">
+            <input id="phone" type="text" placeholder="Phone"
+                    class="bg-white/10 border-b border-white/80 outline-none w-full placeholder-white py-2 px-1 rounded-sm text-sm leading-relaxed">
+            <input id="email" type="email" placeholder="Email"
+                    class="bg-white/10 border-b border-white/80 outline-none w-full placeholder-white py-2 px-1 rounded-sm text-sm leading-relaxed">
+            <input id="address" type="text" placeholder="Address"
+                    class="bg-white/10 border-b border-white/80 outline-none w-full placeholder-white py-2 px-1 rounded-sm text-sm leading-relaxed">
+            <input id="linkedin" type="text" placeholder="LinkedIn Profile"
+                    class="bg-white/10 border-b border-white/80 outline-none w-full placeholder-white py-2 px-1 rounded-sm text-sm leading-relaxed">
+          </div>
+        </section>
+
+        <section class="bg-green-600 p-5 space-y-1">
+          <div class="flex justify-between items-center">
+            <h2 class="font-bold text-lg uppercase border-b border-white w-full">Skills</h2>
+            <button onclick="generateSkillsAI()" class="no-print ml-2 bg-indigo-800 hover:bg-indigo-700 text-white px-2 py-1 rounded text-xs">AI</button>
+          </div>
+          <textarea id="skills" placeholder="Java, Python, HTML..."
+                     class="bg-white/10 border border-white/80 rounded-md p-2 w-full text-white placeholder-white resize-none h-24"></textarea>
+        </section>
+
+      </aside>
+
+      <main class="w-2/3 p-8 text-gray-900">
+
+        <section class="mb-4">
+          <div class="flex justify-between items-center mb-2">
+            <h2 class="text-xl font-bold uppercase border-b-2 border-gray-900 w-full">Professional Summary</h2>
+            <button onclick="generateSummaryAI()" class="no-print ml-2 bg-indigo-600 hover:bg-indigo-700 text-white px-2 py-1 rounded text-sm">AI</button>
+          </div>
+          <textarea id="professional_info" placeholder="Write a short professional summary"
+                    class="w-full border border-gray-300 rounded-md p-2 resize-none h-24"></textarea>
+        </section>
+
+      
+
+
+        <section class="mb-4">
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-bold uppercase border-b-2 border-gray-900 w-full">Projects</h2>
+            <button onclick="generateProjectsAI()" class="no-print ml-2 bg-indigo-600 hover:bg-indigo-700 text-white px-2 py-1 rounded text-sm">AI</button>
+          </div>
+          <textarea id="project" placeholder="AI will generate project details..."
+                    class="w-full border border-gray-300 rounded-md p-2 resize-none h-16"></textarea>
+        </section>
+
+       <section class="mb-2"> <!-- minimal bottom margin -->
+  <h2 class="text-lg font-bold uppercase border-b-2 border-gray-900 mb-1">Education</h2>
+  <div class="space-y-1 text-sm"> <!-- minimal spacing between textareas -->
+    <textarea id="degree" placeholder="Degree"
+              class="font-semibold w-full border-b border-gray-400 outline-none resize-none p-1 min-h-[28px] leading-5"></textarea>
+    <textarea id="institute_name" placeholder="Institute Name"
+              class="italic w-full border-b border-gray-300 outline-none resize-none p-1 min-h-[28px] leading-5"></textarea>
+    <textarea id="graduationyear" placeholder="Graduation Year"
+              class="font-semibold w-full border-b border-gray-400 outline-none resize-none p-1 min-h-[28px] leading-5"></textarea>
+  </div>
+</section>
+
+
+        <section>
+          <h2 class="text-xl font-bold uppercase border-b-2 border-gray-900 mb-4">Certificates</h2>
+          <textarea id="certificate" placeholder="List your certificates here"
+                    class="w-full border border-gray-300 rounded-md p-2 resize-none h-16"></textarea>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <div class="fixed bottom-5 left-1/2 transform -translate-x-1/2 no-print">
+    <button onclick="generatePDF()"
+            class="bg-indigo-600 text-white px-8 py-2 rounded-lg font-semibold hover:bg-indigo-700 transition duration-300">
+      Download Resume
+    </button>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+  <script>
+    let profilePictureBase64 = null;
+
+    async function callAI(type) {
+      const name = document.getElementById("name").value || "Candidate";
+      const degree = document.getElementById("degree").value || "";
+      const skills = document.getElementById("skills").value || "";
+      const body = { type, name, degree, skills };
+
+      try {
+        const res = await fetch("http://localhost:8080/api/ai/generate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body)
+        });
+        return await res.text();
+      } catch (err) {
+        alert("AI Backend not running!");
+        return "";
+      }
+    }
+
+    async function generateSummaryAI() {
+      document.getElementById("professional_info").value = "Generating summary using AI...";
+      document.getElementById("professional_info").value = await callAI("summary");
+    }
+
+    async function generateSkillsAI() {
+      document.getElementById("skills").value = "Generating skills using AI...";
+      document.getElementById("skills").value = await callAI("skills");
+    }
+
+    async function generateProjectsAI() {
+      document.getElementById("project").value = "Generating projects using AI...";
+      document.getElementById("project").value = await callAI("projects");
+    }
+
+    function previewPhoto(event) {
+      const file = event.target.files[0];
+      if (file) {
+        document.getElementById("profilePreview").src = URL.createObjectURL(file);
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          profilePictureBase64 = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      } else {
+        profilePictureBase64 = null;
+        document.getElementById("profilePreview").src = "https://placehold.co/100x100";
+      }
+    }
+
+    async function saveResumeToBackend() {
+      const resumeData = {
+        name: document.getElementById('name').value,
+        phone: document.getElementById('phone').value, 
+        email: document.getElementById('email').value,
+        address: document.getElementById('address').value,
+        linkedin: document.getElementById('linkedin').value,
+        skills: document.getElementById('skills').value,
+        summary: document.getElementById('professional_info').value,
+      
+        projects: document.getElementById('project').value,
+        degree: document.getElementById('degree').value,
+        institute: document.getElementById('institute_name').value,
+        graduationYear: document.getElementById('graduationyear').value,
+        coursework: "",
+        education: "", 
+        certificateTitle: document.getElementById('certificate').value,
+        issuedBy: "",
+        profileImage: profilePictureBase64
+      };
+
+      try {
+        const response = await fetch('http://localhost:8080/api/resumes', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(resumeData)
+        });
+
+        if (response.ok) {
+          console.log('Resume saved successfully to database!');
+        } else {
+          const errorText = await response.text();
+          console.error('Error:', errorText);
+        }
+      } catch (err) {
+        console.error('Error:', err);
+        alert('Server not running or connection failed!');
+      }
+    }
+
+    async function generatePDF() {
+      await saveResumeToBackend(); 
+      const element = document.getElementById("resumeContent");
+      const opt = {
+        margin: [0, 0, 0, 0],
+        filename: 'My_Resume.pdf',
+        image: { type: 'jpeg', quality: 1 },
+        html2canvas: { 
+          scale: 2, 
+          useCORS: true, 
+          scrollY: 0,
+          ignoreElements: (el) => el.classList.contains("no-print") || el.tagName === 'LABEL' 
+        },
+        jsPDF: { unit: 'px', format: [794, 1123], orientation: 'portrait' }
+      };
+      html2pdf().set(opt).from(element).save();
+    }
+  </script>
+
+</body>
+</html>

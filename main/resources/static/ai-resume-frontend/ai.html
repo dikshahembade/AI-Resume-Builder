@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Resume</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        line-height: 1.4;
+    }
+    .header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+    .header img {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        margin-right: 15px;
+    }
+    .contact-info p {
+        margin: 2px 0;
+    }
+    h2 {
+        font-size: 20px;
+        margin: 10px 0 5px;
+        border-bottom: 1px solid #000;
+        padding-bottom: 3px;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 10px;
+    }
+    th, td {
+        border: 1px solid #000;
+        padding: 6px 8px;
+        text-align: left;
+    }
+    th {
+        background-color: #f2f2f2;
+    }
+    input {
+        padding: 5px;
+        margin: 3px 0;
+        width: 95%;
+    }
+    button {
+        padding: 5px 10px;
+        margin: 5px 5px 0 0;
+        cursor: pointer;
+    }
+    ul {
+        margin: 0;
+        padding-left: 20px;
+    }
+</style>
+</head>
+<body>
+
+<!-- Header: Photo + Contact -->
+<div class="header">
+    <img src="photo.jpg" alt="Your Photo">
+    <div class="contact-info">
+        <h1>Your Name</h1>
+        <p>Phone: +91-XXXXXXXXXX</p>
+        <p>Email: your.email@example.com</p>
+        <p>LinkedIn: linkedin.com/in/username</p>
+        <p>Location: City, State, Country</p>
+    </div>
+</div>
+
+<!-- Professional Summary -->
+<h2>Professional Summary</h2>
+<p>Fresh engineering graduate with strong programming and problem-solving skills. Highly motivated to learn and contribute in software development, web development, and project management roles.</p>
+
+<!-- Skills -->
+<h2>Skills</h2>
+<ul>
+    <li>Programming Languages: Python, Java, C++</li>
+    <li>Web Development: HTML, CSS, JavaScript</li>
+    <li>Tools & Technologies: Git, SQL, Linux</li>
+</ul>
+
+<!-- Work Experience -->
+<h2>Work Experience</h2>
+<p><strong>Assistant Professor</strong>, ABC Engineering College (2023-Present)</p>
+<ul>
+    <li>Guided final year students on their projects.</li>
+    <li>Prepared and delivered course materials for engineering subjects.</li>
+</ul>
+<p><strong>Intern / Developer</strong>, XYZ Company (2022-2023)</p>
+<ul>
+    <li>Developed web applications using HTML, CSS, and JavaScript.</li>
+</ul>
+
+<!-- Projects -->
+<h2>Projects</h2>
+<ul>
+    <li><strong>Project 1:</strong> Online Bookstore Web Application – Developed front-end and back-end features using HTML, CSS, JS, and Python Flask.</li>
+    <li><strong>Project 2:</strong> Student Management System – Created database-driven system using SQL and Python to manage student data efficiently.</li>
+</ul>
+
+<!-- Education -->
+<h2>Education</h2>
+<table id="educationTable">
+    <tr>
+        <th>Degree / Specialization</th>
+        <th>College / University</th>
+        <th>Year of Graduation</th>
+        <th>CGPA</th>
+        <th>Actions</th>
+    </tr>
+</table>
+
+<h3>Add New Degree</h3>
+<form id="eduForm">
+    <input type="text" id="degree" placeholder="Degree / Specialization" required>
+    <input type="text" id="college" placeholder="College / University" required>
+    <input type="text" id="year" placeholder="Year of Graduation" required>
+    <input type="text" id="cgpa" placeholder="CGPA">
+    <button type="submit">Add Degree</button>
+</form>
+
+<!-- Certificates -->
+<h2>Certificates</h2>
+<ul>
+    <li>Certificate 1: Completed Python Programming Bootcamp</li>
+    <li>Certificate 2: Web Development with HTML, CSS, JavaScript</li>
+    <li>Certificate 3: Data Science and Machine Learning Fundamentals</li>
+</ul>
+
+<!-- Education JS -->
+<script>
+    const form = document.getElementById('eduForm');
+    const table = document.getElementById('educationTable');
+
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const degree = document.getElementById('degree').value;
+        const college = document.getElementById('college').value;
+        const year = document.getElementById('year').value;
+        const cgpa = document.getElementById('cgpa').value;
+
+        const row = table.insertRow();
+        row.insertCell(0).textContent = degree;
+        row.insertCell(1).textContent = college;
+        row.insertCell(2).textContent = year;
+        row.insertCell(3).textContent = cgpa ? cgpa : '';
+
+        const actionCell = row.insertCell(4);
+
+        // Remove CGPA button
+        const removeCgpaBtn = document.createElement('button');
+        removeCgpaBtn.textContent = 'Remove CGPA';
+        removeCgpaBtn.addEventListener('click', function() {
+            row.cells[3].textContent = '';
+        });
+        actionCell.appendChild(removeCgpaBtn);
+
+        // Delete row button
+        const deleteBtn = document.createElement('button');
+        deleteBtn.textContent = 'Delete';
+        deleteBtn.addEventListener('click', function() {
+            table.deleteRow(row.rowIndex);
+        });
+        actionCell.appendChild(deleteBtn);
+
+        form.reset();
+    });
+</script>
+
+</body>
+</html>

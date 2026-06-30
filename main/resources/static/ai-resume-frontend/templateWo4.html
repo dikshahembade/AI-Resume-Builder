@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Resume Builder - Elegant A4 Template</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    #resumeContent {
+      width: 794px;
+      height: 1123px;
+      background: white;
+      margin: 0 auto;
+      box-sizing: border-box;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    @media print {
+      body * { visibility: hidden; }
+      #resumeContent, #resumeContent * { visibility: visible; }
+      #resumeContent { position: absolute; left: 0; top: 0; }
+      .no-print { display: none !important; }
+    }
+  </style>
+</head>
+
+<body class="min-h-screen bg-gradient-to-br from-blue-900 via-gray-800 to-gray-900 flex flex-col items-center py-10 font-sans">
+
+  <!-- TOP NAV -->
+  <div class="w-full flex justify-between items-center px-10 mb-8 no-print">
+    <h1 class="text-2xl font-bold text-white">
+      AI <span class="text-indigo-400">Resume Builder</span>
+    </h1>
+    <div class="space-x-4">
+      <a href="home.html" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-semibold transition duration-300">Home</a>
+      <a href="Template.html" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-semibold transition duration-300">Choose Template</a>
+    </div>
+  </div>
+
+  <!-- MAIN RESUME (A4) -->
+  <div id="resumeContent" class="shadow-2xl rounded-lg overflow-hidden">
+
+    <!-- HEADER -->
+    <header class="bg-blue-900 text-white py-6 px-8 text-center">
+      <input id="name" 
+        type="text" placeholder="YOUR NAME"
+        class="bg-transparent text-4xl font-bold uppercase outline-none text-center placeholder:text-gray-300 w-full">
+    </header>
+
+    <!-- CONTENT -->
+    <main class="flex-1 p-10 text-gray-900 space-y-5 overflow-y-auto">
+
+      <!-- CONTACT -->
+      <section class="mb-2">
+        <h2 class="text-lg font-bold uppercase border-b-2 border-gray-900 mb-1">Contact Information</h2>
+        <div class="grid grid-cols-2 gap-2 text-sm">
+          <input id="phone" type="text" placeholder="Phone" class="border-b border-gray-400 outline-none p-1">
+          <input id="email" type="email" placeholder="Email" class="border-b border-gray-400 outline-none p-1">
+          <input id="linkedin" type="text" placeholder="LinkedIn Profile" class="col-span-2 border-b border-gray-400 outline-none p-1">
+          <input id="address" type="text" placeholder="Address" class="col-span-2 border-b border-gray-400 outline-none p-1">
+        </div>
+      </section>
+
+      <!-- SUMMARY + AI -->
+      <section class="mb-2">
+        <div class="flex justify-between items-center">
+          <h2 class="text-lg font-bold uppercase border-b-2 border-gray-900 w-full">Professional Summary</h2>
+          <button onclick="generateSummaryAI()" class="no-print bg-purple-600 hover:bg-purple-700 text-white px-2 py-1 rounded text-xs ml-2">AI</button>
+        </div>
+        <textarea id="summary" placeholder="Write a short summary..."
+          class="w-full border border-gray-400 rounded-md p-2 resize-none h-16 text-sm"></textarea>
+      </section>
+
+      <!-- SKILLS + AI -->
+      <section class="mb-2">
+        <div class="flex justify-between items-center">
+          <h2 class="text-lg font-bold uppercase border-b-2 border-gray-900 w-full">Skills</h2>
+          <button onclick="generateSkillsAI()" class="no-print bg-purple-600 hover:bg-purple-700 text-white px-2 py-1 rounded text-xs ml-2">AI</button>
+        </div>
+        <textarea id="skills" placeholder="Java, Python, HTML..."
+          class="w-full border border-gray-400 rounded-md p-2 resize-none h-14 text-sm"></textarea>
+      </section>
+
+      <!-- WORK -->
+      <section class="mb-2">
+        <h2 class="text-lg font-bold uppercase border-b-2 border-gray-900 mb-1">Work Experience</h2>
+        <div class="space-y-1 text-sm">
+          <input id="jobTitle" type="text" placeholder="Job Title" class="border-b border-gray-400 outline-none w-full p-1">
+          <input id="company" type="text" placeholder="Company Name" class="italic border-b border-gray-300 outline-none w-full p-1">
+          <input id="duration" type="text" placeholder="Duration (e.g., 2022 - Present)" class="border-b border-gray-300 outline-none w-full p-1">
+        </div>
+      </section>
+
+      <!-- PROJECTS + AI -->
+      <section class="mb-2">
+        <div class="flex justify-between items-center">
+          <h2 class="text-lg font-bold uppercase border-b-2 border-gray-900 w-full">Projects</h2>
+          <button onclick="generateProjectsAI()" class="no-print bg-purple-600 hover:bg-purple-700 text-white px-2 py-1 rounded text-xs ml-2">AI</button>
+        </div>
+        <textarea id="projects" placeholder="Project name, description, technologies used..."
+          class="w-full border border-gray-400 rounded-md p-2 resize-none h-14 text-sm"></textarea>
+      </section>
+
+      <!-- EDUCATION -->
+      <section class="mb-2">
+        <h2 class="text-lg font-bold uppercase border-b-2 border-gray-900 mb-1">Education</h2>
+        <div class="space-y-1 text-sm">
+          <input id="degree" type="text" placeholder="Degree" class="border-b border-gray-400 outline-none w-full p-1">
+          <input id="institute" type="text" placeholder="Institute Name" class="italic border-b border-gray-300 outline-none w-full p-1">
+          <input id="graduationYear" type="text" placeholder="Graduation Year" class="border-b border-gray-300 outline-none w-full p-1">
+        </div>
+      </section>
+
+      <!-- CERTIFICATES -->
+      <section>
+        <h2 class="text-lg font-bold uppercase border-b-2 border-gray-900 mb-1">Certificates</h2>
+        <textarea id="certificateTitle" placeholder="List your certificates..."
+          class="w-full border border-gray-400 rounded-md p-2 resize-none h-10 text-sm"></textarea>
+      </section>
+    </main>
+  </div>
+
+  <!-- DOWNLOAD BUTTON -->
+  <div class="fixed bottom-5 left-1/2 transform -translate-x-1/2 no-print">
+    <button onclick="generatePDF()" 
+      class="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-2 rounded-lg font-semibold transition duration-300">
+      Download Resume (PDF)
+    </button>
+  </div>
+
+  <!-- JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+
+  <script>
+
+  /*---------------------------------
+      AI BACKEND CALL
+  ----------------------------------*/
+  async function callAI(type) {
+    const name = document.getElementById("name").value || "Candidate";
+    const degree = document.getElementById("degree").value || "";
+    const skills = document.getElementById("skills").value || "";
+
+    const body = { type, name, degree, skills };
+
+    try {
+      const res = await fetch("http://localhost:8080/api/ai/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+      });
+
+      return await res.text();
+    } catch (err) {
+      alert("AI Backend not running!");
+      return "";
+    }
+  }
+
+  async function generateSummaryAI() {
+    document.getElementById("summary").value = "Generating using AI...";
+    document.getElementById("summary").value = await callAI("summary");
+  }
+
+  async function generateSkillsAI() {
+    document.getElementById("skills").value = "Generating using AI...";
+    document.getElementById("skills").value = await callAI("skills");
+  }
+
+  async function generateProjectsAI() {
+    document.getElementById("projects").value = "Generating using AI...";
+    document.getElementById("projects").value = await callAI("projects");
+  }
+
+  /*---------------------------------
+      SAVE TO BACKEND
+  ----------------------------------*/
+  async function saveResumeToBackend() {
+    const exp = document.getElementById("jobTitle").value + " at " +
+                document.getElementById("company").value + " (" +
+                document.getElementById("duration").value + ")";
+
+    const edu = document.getElementById("degree").value + ", " +
+                document.getElementById("institute").value + " (" +
+                document.getElementById("graduationYear").value + ")";
+
+    const resumeData = {
+      name: document.getElementById('name').value,
+      phone: document.getElementById('phone').value,
+      email: document.getElementById('email').value,
+      linkedin: document.getElementById('linkedin').value,
+      address: document.getElementById('address').value,
+      summary: document.getElementById('summary').value,
+      skills: document.getElementById('skills').value,
+      jobTitle: document.getElementById('jobTitle').value,
+      company: document.getElementById('company').value,
+      duration: document.getElementById('duration').value,
+      experience: exp,
+      projects: document.getElementById('projects').value,
+      degree: document.getElementById('degree').value,
+      institute: document.getElementById('institute').value,
+      graduationYear: document.getElementById('graduationYear').value,
+      certificateTitle: document.getElementById('certificateTitle').value,
+      education: edu
+    };
+
+    try {
+      await fetch("http://localhost:8080/api/resumes", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(resumeData)
+      });
+    } catch (err) {
+      alert("Backend save failed!");
+    }
+  }
+
+  /*---------------------------------
+      PDF GENERATION (SHARP)
+  ----------------------------------*/
+  async function generatePDF() {
+    await saveResumeToBackend();
+
+    const element = document.getElementById("resumeContent");
+
+    const opt = {
+      margin: 0,
+      filename: "My_Resume.pdf",
+      image: { type: "jpeg", quality: 1 },
+
+      html2canvas: {
+        scale: 3,
+        scrollY: 0,
+        useCORS: true,
+        allowTaint: true,
+        imageTimeout: 0
+      },
+
+      jsPDF: {
+        unit: "px",
+        format: [794, 1123],
+        orientation: "portrait",
+        compress: false
+      }
+    };
+
+    html2pdf().set(opt).from(element).save();
+  }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,23 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+
+body {
+  font-family: 'Inter', sans-serif;
+}
+
+.template-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid #d1d5db;
+}
+
+.template-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(79, 70, 229, 0.3);
+}
+
+.resume-preview {
+  transition: border-color 0.3s ease;
+}
+
+button {
+  cursor: pointer;
+}

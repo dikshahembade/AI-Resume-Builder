@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Resume Builder - Perfect A4 Fit</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    #resumeContent {
+      width: 794px;
+      height: 1123px;
+      background: white;
+      margin: 0 auto;
+      padding: 36px 56px;
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    @media print {
+      body * { visibility: hidden; }
+      #resumeContent, #resumeContent * { visibility: visible; }
+      #resumeContent { position: absolute; left: 0; top: 0; }
+      .no-print { display: none; }
+    }
+  </style>
+</head>
+
+<body class="min-h-screen bg-gray-900 flex flex-col items-center py-10">
+
+  <!-- TOP BAR -->
+  <div class="w-full flex justify-between items-center px-10 mb-8 no-print">
+    <h1 class="text-2xl font-bold text-white">AI <span class="text-indigo-400">Resume Builder</span></h1>
+
+    <div class="space-x-4">
+      <a href="home.html" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">Home</a>
+      <a href="Template.html" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg">Choose Template</a>
+    </div>
+  </div>
+
+  <!-- A4 RESUME -->
+  <div id="resumeContent" class="rounded-lg shadow-2xl text-gray-900">
+
+    <!-- NAME -->
+    <section class="flex items-center justify-between mb-3">
+      <div class="flex-1 pr-6">
+        <input id="name" type="text" placeholder="Your Full Name"
+          class="text-3xl font-bold w-full mb-1 outline-none">
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="mb-2">
+      <h2 class="text-lg font-bold uppercase border-b-2 border-gray-900 mb-1">Contact</h2>
+      <div class="grid grid-cols-2 gap-2 text-sm">
+        <input id="phone" class="p-1 outline-none" placeholder="Phone">
+        <input id="email" type="email" class="p-1 outline-none" placeholder="Email">
+        <input id="linkedin" class="p-1 outline-none" placeholder="LinkedIn Profile">
+        <input id="address" class="col-span-2 p-1 outline-none" placeholder="Address">
+      </div>
+    </section>
+
+    <!-- SUMMARY -->
+    <section class="mb-2">
+      <div class="flex justify-between items-center">
+        <h2 class="text-lg font-bold uppercase border-b-2 border-gray-900 mb-1 w-full">Professional Summary</h2>
+        <button onclick="generateSummaryAI()" class="no-print ml-2 bg-purple-600 hover:bg-purple-700 text-white px-3 py-1 rounded text-sm">AI</button>
+      </div>
+      <textarea id="summary" class="w-full rounded-md p-2 h-16 text-sm resize-none"
+        placeholder="AI will generate your summary..."></textarea>
+    </section>
+
+    <!-- SKILLS -->
+    <section class="mb-2">
+      <div class="flex justify-between items-center">
+        <h2 class="text-lg font-bold uppercase border-b-2 border-gray-900 mb-1 w-full">Skills</h2>
+        <button onclick="generateSkillsAI()" class="no-print ml-2 bg-purple-600 hover:bg-purple-700 text-white px-3 py-1 rounded text-sm">AI</button>
+      </div>
+      <textarea id="skills" class="w-full rounded-md p-2 h-16 text-sm resize-none"
+        placeholder="AI will generate your skills"></textarea>
+    </section>
+
+   
+
+    <!-- PROJECTS -->
+    <section class="mb-2">
+      <div class="flex justify-between items-center">
+        <h2 class="text-lg font-bold uppercase border-b-2 border-gray-900 mb-1 w-full">Projects</h2>
+        <button onclick="generateProjectsAI()" class="no-print ml-2 bg-purple-600 hover:bg-purple-700 text-white px-3 py-1 rounded text-sm">AI</button>
+      </div>
+      <textarea id="projects" class="w-full rounded-md p-2 h-16 text-sm resize-none"
+        placeholder="AI will generate your projects..."></textarea>
+    </section>
+
+    <!-- EDUCATION -->
+    <section class="mb-2">
+      <h2 class="text-lg font-bold uppercase border-b-2 border-gray-900 mb-1">Education</h2>
+      <div class="space-y-1 text-sm">
+        <input id="degree" class="p-1 w-full outline-none" placeholder="Degree">
+        <input id="institute" class="italic p-1 w-full outline-none" placeholder="Institute Name">
+        <input id="graduationYear" class="p-1 w-full outline-none" placeholder="Graduation Year">
+        <input id="coursework" class="p-1 w-full outline-none" placeholder="Coursework (optional)">
+      </div>
+    </section>
+
+    <!-- CERTIFICATES -->
+    <section>
+      <h2 class="text-lg font-bold uppercase border-b-2 border-gray-900 mb-1">Certificates</h2>
+      <textarea id="certificates" class="w-full rounded-md p-2 h-14 text-sm resize-none"
+        placeholder="List your certificates..."></textarea>
+    </section>
+
+  </div>
+
+  <!-- DOWNLOAD BUTTON -->
+  <div class="fixed bottom-5 left-1/2 -translate-x-1/2 no-print">
+    <button onclick="generatePDF()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-2 rounded-lg font-semibold">
+      Download Resume (PDF)
+    </button>
+  </div>
+
+  <!-- JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+
+  <script>
+  /* ------------------ AI FEATURE CALLS ------------------ */
+  async function callAI(type) {
+    const name = document.getElementById('name').value || "Candidate";
+    const degree = document.getElementById('degree').value || "";
+    const skills = document.getElementById('skills').value || "";
+    
+    const request = { type, name, degree, skills };
+    try {
+      const res = await fetch("http://localhost:8080/api/ai/generate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(request)
+      });
+      return await res.text();
+    } catch (err) {
+      alert("AI Backend not running!");
+      return "";
+    }
+  }
+
+  async function generateSummaryAI() {
+    document.getElementById("summary").value = "Generating with AI...";
+    document.getElementById("summary").value = await callAI("summary");
+  }
+
+  async function generateSkillsAI() {
+    document.getElementById("skills").value = "Generating with AI...";
+    document.getElementById("skills").value = await callAI("skills");
+  }
+
+  async function generateProjectsAI() {
+    document.getElementById("projects").value = "Generating with AI...";
+    document.getElementById("projects").value = await callAI("projects");
+  }
+
+  /* ------------------ SAVE & PDF ------------------ */
+  async function saveResumeToBackend() {
+    const resumeData = {
+      fullName: document.getElementById('name').value,
+      phone: document.getElementById('phone').value,
+      email: document.getElementById('email').value,
+      address: document.getElementById('address').value,
+      linkedIn: document.getElementById('linkedin').value,
+      professionalSummary: document.getElementById('summary').value,
+      skills: document.getElementById('skills').value,
+     
+      projects: document.getElementById('projects').value,
+      degree: document.getElementById('degree').value,
+      institute: document.getElementById('institute').value,
+      graduationYear: document.getElementById('graduationYear').value,
+      coursework: document.getElementById('coursework').value,
+      education: document.getElementById('degree').value + ", " +
+                 document.getElementById('institute').value +
+                 " (" + document.getElementById('graduationYear').value + ") | " +
+                 document.getElementById('coursework').value,
+      certificateTitle: document.getElementById('certificates').value
+    };
+
+    try {
+      const response = await fetch('http://localhost:8080/api/resumes', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(resumeData)
+      });
+      if(response.ok) alert("Resume saved successfully!");
+      else alert("Error saving resume");
+    } catch(err) {
+      console.error(err);
+      alert("Server not running or connection failed!");
+    }
+  }
+
+  async function generatePDF() {
+    await saveResumeToBackend();
+
+    const element = document.getElementById("resumeContent").cloneNode(true);
+    element.querySelectorAll(".no-print").forEach(el => el.remove());
+
+    const opt = {
+        margin: [0,0,0,0],
+        filename: 'My_Resume.pdf',
+        image: { type: 'jpeg', quality: 1 },
+        html2canvas: { scale: 4, useCORS: true, scrollY: 0 },
+        jsPDF: { unit: 'px', format: [794, 1123], orientation: 'portrait' }
+    };
+
+    html2pdf().set(opt).from(element).save();
+  }
+
+  </script>
+
+</body>
+</html>
